@@ -1,13 +1,16 @@
-import { getFunnelApiUrl } from "../lib/funnelEngine";
 import React, { useState } from "react";
 import { Dumbbell, Video, Check, ArrowRight, Sparkles, ShieldCheck, Lock, UserCheck } from "lucide-react";
 import type { ProgramSeriesItem } from "../lib/programSeries";
+import { getFunnelApiUrl } from "../lib/funnelEngine";
+import FunnelVideoPlayer from "./FunnelVideoPlayer";
+import { FUNNEL_VIDEOS } from "../lib/funnelVideos";
 
 interface MatchedProgramStepProps {
   funnelId: "funnel_a" | "funnel_b";
   matchedProgram: ProgramSeriesItem;
   customerEmail?: string;
   customerName?: string;
+  hasBands?: boolean;
   onAccept: (orderData: any) => void;
   onDecline: () => void; // Routes to $199 Downsell
 }
@@ -17,6 +20,7 @@ export default function MatchedProgramStep({
   matchedProgram,
   customerEmail = "",
   customerName = "",
+  hasBands = false,
   onAccept,
   onDecline,
 }: MatchedProgramStepProps) {
@@ -90,6 +94,13 @@ export default function MatchedProgramStep({
       {error && (
         <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-['DM_Sans']">
           {error}
+        </div>
+      )}
+
+      {/* ── 6. Special Offer - Bands (At top of upsell page after Bands Purchase) ── */}
+      {hasBands && (
+        <div className="mb-8">
+          <FunnelVideoPlayer video={FUNNEL_VIDEOS.specialOfferBands} heroMode={false} />
         </div>
       )}
 

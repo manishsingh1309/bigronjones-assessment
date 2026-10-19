@@ -1,5 +1,7 @@
 import React from "react";
-import { CheckCircle2, Package, Dumbbell, Crown, ArrowRight, ShieldCheck, Lock, ExternalLink } from "lucide-react";
+import { CheckCircle2, Package, Dumbbell, Crown, ShieldCheck, Lock, ExternalLink } from "lucide-react";
+import FunnelVideoPlayer from "./FunnelVideoPlayer";
+import { FUNNEL_VIDEOS, type FunnelVideoConfig } from "../lib/funnelVideos";
 
 interface ConfirmationStepProps {
   funnelId: "funnel_a" | "funnel_b";
@@ -38,8 +40,44 @@ export default function ConfirmationStep({
 
   const total = calculateTotal();
 
+  // ── Determine Video according to Client Instructions ───────────────────────
+  // 1. Welcome Video: Insert of the Final Confirmation Page (NOT the $199 purchase, MFA or WWP)
+  // 2. Purchase Video: Insert on the Confirmation page only if they pay for the downsell of $199
+  // 3. Purchase Video Variant: Insert at the top of the Confirmation Page upon purchasing Men's Fitness Alliance (Hero Section)
+  // 4. Purchase Video Women: Insert at the top of the Confirmation Page upon purchasing Woman Wellness Program (Hero Section)
+
+  const coachingTitle = (orderSummary.coachingProgramTitle || "").toLowerCase();
+  const isWwp = coachingTitle.includes("women") || coachingTitle.includes("wwp");
+  const isMfa = !isWwp && (coachingTitle.includes("men") || coachingTitle.includes("mfa") || coachingTitle.includes("alliance"));
+  const isDownsell = Boolean(orderSummary.isDownsell);
+
+  let activeVideo: FunnelVideoConfig = FUNNEL_VIDEOS.welcome;
+  let isHeroVideo = false;
+
+  if (isMfa) {
+    activeVideo = FUNNEL_VIDEOS.mfaVariant;
+    isHeroVideo = true;
+  } else if (isWwp) {
+    activeVideo = FUNNEL_VIDEOS.wwpWomen;
+    isHeroVideo = true;
+  } else if (isDownsell) {
+    activeVideo = FUNNEL_VIDEOS.downsellPurchase;
+    isHeroVideo = false;
+  } else {
+    // Standard purchase (Primary $249, bundles, etc. - NOT $199, NOT MFA, NOT WWP)
+    activeVideo = FUNNEL_VIDEOS.welcome;
+    isHeroVideo = false;
+  }
+
   return (
-    <div className="w-full max-w-2xl mx-auto text-center py-2 sm:py-4">
+    <div className="w-full max-w-3xl mx-auto text-center py-2 sm:py-4">
+      {/* ── 1. HERO VIDEO: When purchasing MFA or WWP, insert at top of Confirmation Page in Hero Section ── */}
+      {isHeroVideo && (
+        <div className="mb-8">
+          <FunnelVideoPlayer video={activeVideo} heroMode={true} />
+        </div>
+      )}
+
       {/* ── Success Icon & Header ─────────────────────────────────────────── */}
       <div className="w-16 h-16 sm:w-20 sm:h-20 bg-emerald-50 border-2 border-emerald-500 rounded-full flex items-center justify-center mx-auto mb-5 shadow-lg shadow-emerald-500/10">
         <CheckCircle2 className="w-9 h-9 sm:w-11 sm:h-11 text-emerald-600" />
@@ -55,6 +93,13 @@ export default function ConfirmationStep({
         Your orders have been processed and your account entitlements are active. Confirmation receipt and credentials have been dispatched to:
         <span className="block font-['DM_Mono'] font-bold text-slate-900 mt-1 text-sm">{customerEmail}</span>
       </p>
+
+      {/* ── 2. NON-HERO VIDEO: Insert Welcome Video or $199 Downsell Purchase Video on Confirmation Page ── */}
+      {!isHeroVideo && (
+        <div className="mb-8 text-left">
+          <FunnelVideoPlayer video={activeVideo} heroMode={false} />
+        </div>
+      )}
 
       {/* ── Itemized Order Summary Box ────────────────────────────────────── */}
       <div className="bg-white border-2 border-[#0A3161]/20 rounded-3xl p-6 sm:p-8 text-left shadow-2xl mb-8 space-y-6">

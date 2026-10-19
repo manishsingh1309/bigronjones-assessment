@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { Sparkles, Check, ArrowRight, AlertCircle, BookmarkCheck, Lock, ShieldCheck } from "lucide-react";
 import { getFunnelApiUrl } from "../lib/funnelEngine";
 import { programSeries, getProgramSeriesItem, type ProgramSeriesItem } from "../lib/programSeries";
+import FunnelVideoPlayer from "./FunnelVideoPlayer";
+import { FUNNEL_VIDEOS } from "../lib/funnelVideos";
 
 interface TwoPackUpsellStepProps {
   funnelId: "funnel_a" | "funnel_b";
   purchasedProgramId: number;
   customerEmail?: string;
   customerName?: string;
+  hasBands?: boolean;
   onAccept: (orderData: any, selectedPrograms?: ProgramSeriesItem[]) => void;
   onDecline: () => void;
 }
@@ -17,6 +20,7 @@ export default function TwoPackUpsellStep({
   purchasedProgramId,
   customerEmail = "",
   customerName = "",
+  hasBands = false,
   onAccept,
   onDecline,
 }: TwoPackUpsellStepProps) {
@@ -133,6 +137,11 @@ export default function TwoPackUpsellStep({
           <span>{error}</span>
         </div>
       )}
+
+      {/* ── 5. Special Offer Video Briefing (At top of 2-Program Upsell Page) ── */}
+      <div className="mb-8">
+        <FunnelVideoPlayer video={FUNNEL_VIDEOS.specialOffer} heroMode={false} />
+      </div>
 
       {/* ── Selection Grid ────────────────────────────────────────────────── */}
       <div className="mb-8">

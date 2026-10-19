@@ -240,6 +240,7 @@ export default function FunnelB() {
           matchedProgram={matchedProgram}
           customerEmail={assessmentData?.email}
           customerName={assessmentData?.fullName}
+          hasBands={bandsClaimed}
           onAccept={() => {
             setPurchasedPrimary(true);
             saveSessionState("brj_purchased_primary", true);
@@ -272,6 +273,7 @@ export default function FunnelB() {
           purchasedProgramId={matchedProgram.id}
           customerEmail={assessmentData?.email}
           customerName={assessmentData?.fullName}
+          hasBands={bandsClaimed}
           onAccept={(data, selectedPrograms) => {
             setPurchasedTwoPack(true);
             saveSessionState("brj_purchased_twopack", true);
