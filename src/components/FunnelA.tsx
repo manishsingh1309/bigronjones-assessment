@@ -86,11 +86,37 @@ export default function FunnelA() {
       .catch((e) => console.warn("[FunnelA] inventory probe note:", e?.message));
   }, []);
 
-  // Check URL params for checkout returns (?session_id=...&type=...)
+  // Check URL params for checkout returns (?session_id=...&type=...) or video preview (?video=1..6)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const type = params.get("type");
-    if (params.get("session_id")) {
+    const videoParam = params.get("video") || params.get("preview_video");
+
+    if (videoParam) {
+      if (videoParam === "1" || videoParam === "welcome") {
+        setPurchasedDownsell(false);
+        setPurchasedAscension(false);
+        setStep("confirmation");
+      } else if (videoParam === "2" || videoParam === "downsell" || videoParam === "purchase") {
+        setPurchasedDownsell(true);
+        setPurchasedAscension(false);
+        setStep("confirmation");
+      } else if (videoParam === "3" || videoParam === "mfa" || videoParam === "variant") {
+        setPurchasedAscension(true);
+        setAssessmentData((prev) => ({ ...(prev || {}), gender: "Male", fullName: "Test Athlete", email: "athlete@bigronjones.com" } as any));
+        setStep("confirmation");
+      } else if (videoParam === "4" || videoParam === "wwp" || videoParam === "women") {
+        setPurchasedAscension(true);
+        setAssessmentData((prev) => ({ ...(prev || {}), gender: "Female", fullName: "Test Athlete", email: "athlete@bigronjones.com" } as any));
+        setStep("confirmation");
+      } else if (videoParam === "5" || videoParam === "upsell" || videoParam === "special_offer") {
+        setPurchasedPrimary(true);
+        setStep("twopack_upsell");
+      } else if (videoParam === "6" || videoParam === "bands" || videoParam === "bands_upsell") {
+        setBandsClaimed(true);
+        setStep("matched_program");
+      }
+    } else if (params.get("session_id")) {
       if (type === "bands") {
         setBandsClaimed(true);
         saveSessionState("brj_bands_claimed", true);
