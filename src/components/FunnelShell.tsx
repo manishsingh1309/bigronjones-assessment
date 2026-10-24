@@ -77,12 +77,9 @@ export default function FunnelShell({
               className="flex items-center gap-2.5 sm:gap-3.5 group select-none cursor-pointer"
             >
               <img
-                src="/images/ron/bigronjones.png?v=4"
+                src="/images/ron/bigronjones.png?v=5"
                 alt="BigRonJones®"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = "/images/ron/ron-headshot.png";
-                }}
-                className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 select-none rounded-full border-2 border-[#0A3161]/70 object-cover object-center shadow-sm"
+                className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 select-none rounded-full ring-2 ring-[#be1e2f] object-cover object-center shadow-sm"
               />
               <span className="font-['Bebas_Neue'] text-2xl tracking-[0.08em] sm:text-3xl text-slate-900 select-none leading-none">
                 BIGRONJONES
