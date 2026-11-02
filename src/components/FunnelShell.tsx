@@ -189,7 +189,7 @@ export default function FunnelShell({
                 </span>
               </p>
               <p className="text-xs text-slate-500 font-['DM_Mono']">
-                BigRonJones LLC · 10845 Griffith Peak Dr, Las Vegas, NV 89135
+                BigRonJonesLLC · Hahira, GA 31632
               </p>
             </div>
 
@@ -200,10 +200,10 @@ export default function FunnelShell({
                   Client Support &amp; Oversight
                 </h4>
                 <a
-                  href="mailto:RonJones@BigRonJones.com"
+                  href="mailto:Coaching@BigRonJones.com"
                   className="text-sm text-[#0A3161] hover:text-[#08274d] font-['DM_Mono'] font-medium transition-colors"
                 >
-                  RonJones@BigRonJones.com
+                  Coaching@BigRonJones.com
                 </a>
               </div>
 
@@ -285,7 +285,7 @@ export default function FunnelShell({
                     By participating in BigRonJones® programs, you acknowledge that you are physically capable of physical exercise and have consulted a qualified physician if necessary.
                   </p>
                   <p>
-                    All video modules, training regimens, and coaching materials are proprietary intellectual property of BigRonJones LLC.
+                    All video modules, training regimens, and coaching materials are proprietary intellectual property of BigRonJonesLLC.
                   </p>
                 </>
               )}
