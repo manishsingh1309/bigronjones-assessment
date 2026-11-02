@@ -204,7 +204,7 @@ export default function ConfirmationStep({
           Receipt Verified
         </span>
         <span>•</span>
-        <span>Customer Support: RonJones@BigRonJones.com</span>
+        <span>Customer Support: Coaching@BigRonJones.com</span>
       </div>
     </div>
   );
