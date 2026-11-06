@@ -203,22 +203,29 @@ export default function AssessmentStep({
         try {
           sessionStorage.setItem("brj_funnel_prescription", JSON.stringify(data.prescription));
         } catch {}
+
+        // OpenAI conversion pixel trigger (lead_created)
+        if (typeof window !== "undefined") {
+          const w = window as any;
+          if (typeof w.oaiq === "function") {
+            try {
+              w.oaiq("measure", "lead_created", { type: "customer_action" }, { event_id: `lead_${data.sessionId || Date.now()}` });
+            } catch {}
+          }
+        }
+
         onComplete(payload, data.prescription);
         return;
       }
 
-      throw new Error(`Assessment returned status ${res.status}`);
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || `Assessment returned status ${res.status}`);
     } catch (err: any) {
-      console.warn("[AssessmentStep] API fallback to local prescription engine:", err);
-      try {
-        const localPrescription = evaluatePrescription(payload);
-        try {
-          sessionStorage.setItem("brj_funnel_prescription", JSON.stringify(localPrescription));
-        } catch {}
-        onComplete(payload, localPrescription);
-      } catch {
-        setError("Error generating prescription. Please try again.");
-      }
+      console.warn("[AssessmentStep] API error:", err);
+      setError(
+        err?.message ||
+        "We could not securely save your assessment details. Please check your connection and tap retry."
+      );
     } finally {
       setLoading(false);
     }
