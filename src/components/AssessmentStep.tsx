@@ -112,6 +112,9 @@ export default function AssessmentStep({
   const [fullName, setFullName] = useState<string>(initialData?.fullName || "");
   const [email, setEmail] = useState<string>(initialData?.email || "");
   const [phone, setPhone] = useState<string>(initialData?.phone || "");
+  const [sessionId, setSessionId] = useState<string>(
+    () => `sess_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -150,6 +153,7 @@ export default function AssessmentStep({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
     setError(null);
 
     const cleanEmail = email.trim().toLowerCase();
@@ -192,6 +196,7 @@ export default function AssessmentStep({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...payload,
+          sessionId,
           name: payload.fullName,
           funnelId,
           trafficSource: funnelId === "funnel_a" ? "website" : "paid_ad",
